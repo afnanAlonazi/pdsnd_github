@@ -9,14 +9,7 @@ filter_type = ""
 def get_filters():
     global filter_type 
     global city
-    """
-    Asks user to specify a city, month, and day to analyze.
-
-    Returns:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
-    """
+  
     print('Hello! Let\'s explore some US bikeshare data!')
       # Get user input for city (chicago, new york city, washington)
     is_input_valid = False
@@ -68,16 +61,7 @@ def get_filters():
     return city, month, day
 
 def load_data(city, month, day):
-    """
-    Loads data for the specified city and filters by month and day if applicable.
-
-    Args:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
-    Returns:
-        df - Pandas DataFrame containing city data filtered by month and day
-    """
+  
     # note that load function is derived from Practice Solution #3 but I  add try except 
     try:
         # load data file into a dataframe
