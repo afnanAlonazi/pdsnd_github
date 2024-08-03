@@ -19,22 +19,22 @@ def get_filters():
     """
     print('Hello! Let\'s explore some US bikeshare data!')
       # Get user input for city (chicago, new york city, washington)
-    is_input_valid = False
-    while not is_input_valid:
+    
+    while True:
             city = input(" Which city Would you like for Chicago, New York, or Washington? ")
             city = city.strip().lower()
             if city in ['chicago', 'new york', 'washington']:
-                is_input_valid = True
+                break
             else  :
               print("You've made a mistake ! Try again")
       
     #  Get user input for filter type (month, day, both, none)
-    is_input_valid = False
-    while not is_input_valid:
+    
+    while True:
             filter_type = input("Would you like to filter the data by month, day, both, or not at all? Type 'none' for no time filter: ")
             filter_type = filter_type.strip().lower()
             if filter_type in ['month', 'day', 'both', 'none']:
-                is_input_valid = True
+                break
             else :
               print("You've made a mistake ! Try again")
     month  = 'all'
@@ -42,24 +42,24 @@ def get_filters():
     # Get user input for month if needed
     if filter_type in ['month', 'both']:
         months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
-        is_input_valid = False
-        while not is_input_valid:
+      
+        while True:
                 month = input("Which month? January, February, March, April, May, June, or all? ")
                 month=month.strip().lower()
                 if month in months:
-                    is_input_valid = True
+                    break
                 else  :
                   print("You've made a mistake ! Try again")
     
     # Get user input for day if needed
     if filter_type in ['day', 'both']:
         days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all']
-        is_input_valid = False
-        while not is_input_valid:
+        
+        while True:
                 day = input("Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, or all? ")
                 day=day.strip().lower()
                 if day in days:
-                    is_input_valid = True
+                    break
                 else:
                   print("You've made a mistake ! Try again")
     
