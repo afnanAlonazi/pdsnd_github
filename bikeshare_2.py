@@ -6,62 +6,74 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'washington': 'washington.csv' }
 filter_type = "" 
 
-def get_filters():
-    global filter_type 
+
+def get_city():
+    """
+    Asks user to specify a city, month, and day to analyze.
+
+    Returns:
+        (str) city - name of the city to analyze
+        (str) month - name of the month to filter by, or "all" to apply no month filter
+        (str) day - name of the day of week to filter by, or "all" to apply no day filter
+    """
+
     global city
-  
+
     print('Hello! Let\'s explore some US bikeshare data!')
       # Get user input for city (chicago, new york city, washington)
-    is_input_valid = False
-    while not is_input_valid:
+    while True:
             city = input(" Which city Would you like for Chicago, New York, or Washington? ")
             city = city.strip().lower()
             if city in ['chicago', 'new york', 'washington']:
-                is_input_valid = True
-            else  :
-              print("You've made a mistake ! Try again")
-      
+                return city
+            print("You've made a mistake ! Try again")
+            
     #  Get user input for filter type (month, day, both, none)
-    is_input_valid = False
-    while not is_input_valid:
+def get_filter_type():
+    global filter_type 
+    while True:
             filter_type = input("Would you like to filter the data by month, day, both, or not at all? Type 'none' for no time filter: ")
             filter_type = filter_type.strip().lower()
             if filter_type in ['month', 'day', 'both', 'none']:
-                is_input_valid = True
-            else :
-              print("You've made a mistake ! Try again")
-    month  = 'all'
-    day = 'all'    
+                return filter_type
+            print("You've made a mistake ! Try again")
+      
     # Get user input for month if needed
+def get_month():
     if filter_type in ['month', 'both']:
         months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
-        is_input_valid = False
-        while not is_input_valid:
+        while True:
                 month = input("Which month? January, February, March, April, May, June, or all? ")
                 month=month.strip().lower()
                 if month in months:
-                    is_input_valid = True
-                else  :
-                  print("You've made a mistake ! Try again")
+                    return month
+                print("You've made a mistake ! Try again")
     
     # Get user input for day if needed
+def get_day():
     if filter_type in ['day', 'both']:
         days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all']
-        is_input_valid = False
-        while not is_input_valid:
+        while True:
                 day = input("Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, or all? ")
                 day=day.strip().lower()
                 if day in days:
-                    is_input_valid = True
-                else:
-                  print("You've made a mistake ! Try again")
-    
-       
-        print('-'*40)
-    return city, month, day
+                      return day
+                print("You've made a mistake ! Try again")
 
-def load_data(city, month, day):
-  
+
+
+def load_data(city, month="all", day="all"):
+    """
+    Loads data for the specified city and filters by month and day if applicable.
+
+    Args:
+        (str) city - name of the city to analyze
+        (str) month - name of the month to filter by, or "all" to apply no month filter
+        (str) day - name of the day of week to filter by, or "all" to apply no day filter
+    Returns:
+        df - Pandas DataFrame containing city data filtered by month and day
+    """
+
     # note that load function is derived from Practice Solution #3 but I  add try except 
     try:
         # load data file into a dataframe
@@ -97,6 +109,8 @@ def load_data(city, month, day):
         print("The file for", city, "does not exist.")
     except Exception as e:
         print(e)
+def display_stats(caluc, value, filter_type, count):
+    print("Most Popular", caluc , ":", value ," Filter type:", filter_type ,"  Count: " , count)
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
@@ -109,14 +123,14 @@ def time_stats(df):
     # Most common month
     if 'month' in df.columns: # check if df column exists  or not 
         popular_month = df['month'].mode()[0]
-        print("Most Popular Month:", popular_month , " filter type: ", filter_type , " count:" ,  df['month'].value_counts()[popular_month])
+        display_stats("Month", popular_month, filter_type, df['month'].value_counts()[popular_month])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print(" month data not available.")
     # Most common day of week
     if 'day_of_week' in df.columns:
         popular_day = df['day_of_week'].mode()[0]
-        print("Most Popular Day of Week:", popular_day  , " filter type: ", filter_type ," count:" ,  df['day_of_week'].value_counts()[popular_day] )
+        display_stats("Day of Week", popular_day, filter_type, df['day_of_week'].value_counts()[popular_day])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print(" day data not available.")
@@ -124,7 +138,7 @@ def time_stats(df):
     if 'Start Time' in df.columns:
         df['hour'] = df['Start Time'].dt.hour
         popular_hour = df['hour'].mode()[0]
-        print("Most Popular Start Hour:", popular_hour ,  " filter type: ", filter_type , " count:" , df['hour'].value_counts()[popular_hour] )
+        display_stats("Start Hour", popular_hour, filter_type, df['hour'].value_counts()[popular_hour])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("Start Time data not available.")
@@ -144,14 +158,14 @@ def station_stats(df):
         # Most commonly used start station
     if 'Start Station' in df.columns:
         popular_start_station = df['Start Station'].mode()[0]
-        print("Most Popular Start Station:" , popular_start_station , " filter type: ", filter_type , " count:" , df['Start Station'].value_counts()[popular_start_station] )
+        display_stats("Start Station", popular_start_station, filter_type, df['Start Station'].value_counts()[popular_start_station])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("Start Station data not available.")
     # Most commonly used end station
     if 'End Station' in df.columns:
         popular_end_station = df['End Station'].mode()[0]
-        print("Most Popular End Station:", popular_end_station , " filter type: ", filter_type , " count:" ,  df['End Station'].value_counts()[popular_end_station ]  )
+        display_stats("End Station", popular_end_station, filter_type, df['End Station'].value_counts()[popular_end_station])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("End Station data not available.")
@@ -159,7 +173,7 @@ def station_stats(df):
     if 'Start Station' in df.columns and 'End Station' in df.columns:
         df['popular trip'] = df['Start Station'] + " to " + df['End Station']
         popular_trip = df['popular trip'].mode()[0]
-        print("Most Popular Trip:" ,popular_trip , " filter type: ", filter_type , " count:" , df['popular trip'].value_counts()[popular_trip] )
+        display_stats("Trip", popular_trip, filter_type, df['popular trip'].value_counts()[popular_trip])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("Popular trip data not available.")
@@ -244,7 +258,14 @@ def display_trip(df):
 
 def main():
     while True:
-        city, month, day = get_filters()
+        city = get_city()
+        filter_type = get_filter_type()
+
+        if filter_type in ['month', 'both']:
+            month = get_month()
+
+        if filter_type in ['day', 'both']:
+            day = get_day()
         df = load_data(city, month, day)
       
         time_stats(df)
