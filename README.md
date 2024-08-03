@@ -13,5 +13,4 @@ GitHub project (Project 3) repository for PDSND
 bikeshare_2.py
 
 ### Credits
-It's important to give proper credit. Add links to any repo that inspired you or blogposts you consulted.
-
+This project provided by Udacity's "Programming for Data Science with Python Programming for Data Science with Python" Nanodegree program, which provided the foundational knowledge with SQL and python Libraries nump and pandas
