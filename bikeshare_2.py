@@ -58,7 +58,7 @@ def get_day():
                       return day
                 print("You've made a mistake ! Try again")
 
-def load_data(city, month, day):
+def load_data(city, month="all", day="all"):
     """
     Loads data for the specified city and filters by month and day if applicable.
 
@@ -104,6 +104,8 @@ def load_data(city, month, day):
         print("The file for", city, "does not exist.")
     except Exception as e:
         print(e)
+def display_stats(caluc, value, filter_type, count):
+    print("Most Popular", caluc , ":", value ," Filter type:", filter_type ,"  Count: " , count)
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
@@ -116,14 +118,14 @@ def time_stats(df):
     # Most common month
     if 'month' in df.columns: # check if df column exists  or not 
         popular_month = df['month'].mode()[0]
-        print("Most Popular Month:", popular_month , " filter type: ", filter_type , " count:" ,  df['month'].value_counts()[popular_month])
+        display_stats("Month", popular_month, filter_type, df['month'].value_counts()[popular_month])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print(" month data not available.")
     # Most common day of week
     if 'day_of_week' in df.columns:
         popular_day = df['day_of_week'].mode()[0]
-        print("Most Popular Day of Week:", popular_day  , " filter type: ", filter_type ," count:" ,  df['day_of_week'].value_counts()[popular_day] )
+        display_stats("Day of Week", popular_day, filter_type, df['day_of_week'].value_counts()[popular_day])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print(" day data not available.")
@@ -131,7 +133,7 @@ def time_stats(df):
     if 'Start Time' in df.columns:
         df['hour'] = df['Start Time'].dt.hour
         popular_hour = df['hour'].mode()[0]
-        print("Most Popular Start Hour:", popular_hour ,  " filter type: ", filter_type , " count:" , df['hour'].value_counts()[popular_hour] )
+        display_stats("Start Hour", popular_hour, filter_type, df['hour'].value_counts()[popular_hour])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("Start Time data not available.")
@@ -151,14 +153,14 @@ def station_stats(df):
         # Most commonly used start station
     if 'Start Station' in df.columns:
         popular_start_station = df['Start Station'].mode()[0]
-        print("Most Popular Start Station:" , popular_start_station , " filter type: ", filter_type , " count:" , df['Start Station'].value_counts()[popular_start_station] )
+        display_stats("Start Station", popular_start_station, filter_type, df['Start Station'].value_counts()[popular_start_station])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("Start Station data not available.")
     # Most commonly used end station
     if 'End Station' in df.columns:
         popular_end_station = df['End Station'].mode()[0]
-        print("Most Popular End Station:", popular_end_station , " filter type: ", filter_type , " count:" ,  df['End Station'].value_counts()[popular_end_station ]  )
+        display_stats("End Station", popular_end_station, filter_type, df['End Station'].value_counts()[popular_end_station])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("End Station data not available.")
@@ -166,7 +168,7 @@ def station_stats(df):
     if 'Start Station' in df.columns and 'End Station' in df.columns:
         df['popular trip'] = df['Start Station'] + " to " + df['End Station']
         popular_trip = df['popular trip'].mode()[0]
-        print("Most Popular Trip:" ,popular_trip , " filter type: ", filter_type , " count:" , df['popular trip'].value_counts()[popular_trip] )
+        display_stats("Trip", popular_trip, filter_type, df['popular trip'].value_counts()[popular_trip])
         print("\nThis took %s seconds." % (time.time() - start_time))
     else:
         print("Popular trip data not available.")
