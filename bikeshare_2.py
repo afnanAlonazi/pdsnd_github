@@ -6,9 +6,7 @@ CITY_DATA = { 'chicago': 'chicago.csv',
               'washington': 'washington.csv' }
 filter_type = "" 
 
-def get_filters():
-    global filter_type 
-    global city
+def get_city():
     """
     Asks user to specify a city, month, and day to analyze.
 
@@ -17,55 +15,48 @@ def get_filters():
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
+
+    global city
     print('Hello! Let\'s explore some US bikeshare data!')
       # Get user input for city (chicago, new york city, washington)
-    
     while True:
             city = input(" Which city Would you like for Chicago, New York, or Washington? ")
             city = city.strip().lower()
             if city in ['chicago', 'new york', 'washington']:
-                break
-            else  :
-              print("You've made a mistake ! Try again")
-      
+                return city
+            print("You've made a mistake ! Try again")
+            
     #  Get user input for filter type (month, day, both, none)
-    
+def get_filter_type():
+    global filter_type 
     while True:
             filter_type = input("Would you like to filter the data by month, day, both, or not at all? Type 'none' for no time filter: ")
             filter_type = filter_type.strip().lower()
             if filter_type in ['month', 'day', 'both', 'none']:
-                break
-            else :
-              print("You've made a mistake ! Try again")
-    month  = 'all'
-    day = 'all'    
+                return filter_type
+            print("You've made a mistake ! Try again")
+      
     # Get user input for month if needed
+def get_month():
     if filter_type in ['month', 'both']:
         months = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
-      
         while True:
                 month = input("Which month? January, February, March, April, May, June, or all? ")
                 month=month.strip().lower()
                 if month in months:
-                    break
-                else  :
-                  print("You've made a mistake ! Try again")
+                    return month
+                print("You've made a mistake ! Try again")
     
     # Get user input for day if needed
+def get_day():
     if filter_type in ['day', 'both']:
         days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all']
-        
         while True:
                 day = input("Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, or all? ")
                 day=day.strip().lower()
                 if day in days:
-                    break
-                else:
-                  print("You've made a mistake ! Try again")
-    
-       
-        print('-'*40)
-    return city, month, day
+                      return day
+                print("You've made a mistake ! Try again")
 
 def load_data(city, month, day):
     """
@@ -260,7 +251,14 @@ def display_trip(df):
 
 def main():
     while True:
-        city, month, day = get_filters()
+        city = get_city()
+        filter_type = get_filter_type()
+
+        if filter_type in ['month', 'both']:
+            month = get_month()
+
+        if filter_type in ['day', 'both']:
+            day = get_day()
         df = load_data(city, month, day)
       
         time_stats(df)
